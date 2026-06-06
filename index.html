@@ -1,27 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="km">
 <head>
-  <title>SRT to Khmer Voice</title>
+    <meta charset="UTF-8">
+    <title>SRT to Khmer Voice</title>
 </head>
 <body>
-  <h1>SRT to Khmer Voice Tool</h1>
-  <p>Upload your SRT file here.</p>
-  <input type="file" id="srtFile" accept=".srt">
-  
-  <script>
-    document.getElementById('srtFile').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const content = e.target.result;
-          console.log(content); // ទីនេះអ្នកអាចឃើញមាតិកា SRT នៅក្នុង Console
-          alert("ឯកសារត្រូវបានផ្ទុកដោយជោគជ័យ!");
-          // បន្តសរសេរកូដដើម្បីបំបែកអត្ថបទចេញពីពេលវេលា (Timestamp) នៅទីនេះ
-        };
-        reader.readAsText(file);
-      }
-    });
-  </script>
+    <h1>ឧបករណ៍អានឯកសារ SRT</h1>
+    <p>ជ្រើសរើសឯកសារ .srt របស់អ្នក:</p>
+    <input type="file" id="srtFile" accept=".srt">
+    <br><br>
+    <button onclick="readSrt()">ចាប់ផ្ដើមអាន</button>
+    <button onclick="window.speechSynthesis.cancel()">ឈប់</button>
+    
+    <script>
+        function readSrt() {
+            const fileInput = document.getElementById('srtFile');
+            const file = fileInput.files[0];
+            if (!file) { alert("សូមជ្រើសរើសឯកសារសិន!"); return; }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                // លុប Timestamp ចេញដោយប្រើ Regex
+                const cleanText = text.replace(/\d+\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}/g, "")
+                                      .replace(/\n/g, " ")
+                                      .replace(/\d+/g, "");
+                
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'km-KH'; // កំណត់សំឡេងជាភាសាខ្មែរ
+                window.speechSynthesis.speak(utterance);
+            };
+            reader.readAsText(file);
+        }
+    </script>
 </body>
 </html>
+

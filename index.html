@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SRT to Khmer Voice</title>
+</head>
+<body>
+  <h1>SRT to Khmer Voice Tool</h1>
+  <p>Upload your SRT file here.</p>
+  <input type="file" id="srtFile" accept=".srt">
+  
+  <script>
+    document.getElementById('srtFile').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const content = e.target.result;
+          console.log(content); // ទីនេះអ្នកអាចឃើញមាតិកា SRT នៅក្នុង Console
+          alert("ឯកសារត្រូវបានផ្ទុកដោយជោគជ័យ!");
+          // បន្តសរសេរកូដដើម្បីបំបែកអត្ថបទចេញពីពេលវេលា (Timestamp) នៅទីនេះ
+        };
+        reader.readAsText(file);
+      }
+    });
+  </script>
+</body>
+</html>
